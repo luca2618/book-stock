@@ -7,11 +7,11 @@ from tqdm import tqdm
 def scrape_most_popular_reviews():
     books = pd.read_csv('./data/books.csv')
 
-    most_popular_reviews = pd.DataFrame(columns=["book_id", "score","date","review_text"])
+    most_popular_reviews = pd.DataFrame(columns=["goodreads_book_id", "score","date","review_text"])
 
     for index, row in tqdm(books.iterrows(), total=books.shape[0]):
         sleep(1)  # sleep for 1 second to avoid rate limiting
-        book_id = row['book_id']
+        book_id = row['goodreads_book_id']
         url = f'https://www.goodreads.com/book/show/{book_id}'
         
         response = requests.get(url)
@@ -46,7 +46,7 @@ def scrape_most_popular_reviews():
                     }
                 except Exception as e:
                     print("Error parsing review:", e)
-        if index % 100 == 0:
+        if index % 1000 == 0:
             most_popular_reviews.to_csv('./data/most_popular_reviews'+str(index)+'.csv', index=False)
 
 
